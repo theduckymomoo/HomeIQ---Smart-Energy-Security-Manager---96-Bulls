@@ -1,27 +1,51 @@
-import * as React from "react"
-import * as HoverCardPrimitive from "@radix-ui/react-hover-card"
+import React, { useState } from "react";
+import { View, Text, Modal, Pressable, StyleSheet } from "react-native";
 
-import { cn } from "@/lib/utils"
+export const HoverCard = ({ children }: { children: React.ReactNode }) => {
+  return <View>{children}</View>;
+};
 
-const HoverCard = HoverCardPrimitive.Root
+export const HoverCardTrigger = ({ children, onOpen }: any) => {
+  return (
+    <Pressable onPress={onOpen}>
+      {children}
+    </Pressable>
+  );
+};
 
-const HoverCardTrigger = HoverCardPrimitive.Trigger
+export const HoverCardContent = ({ visible, onClose, children }: any) => {
+  return (
+    <Modal
+      transparent
+      visible={visible}
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <Pressable style={styles.overlay} onPress={onClose}>
+        <View style={styles.card}>
+          <Text>{children}</Text>
+        </View>
+      </Pressable>
+    </Modal>
+  );
+};
 
-const HoverCardContent = React.forwardRef<
-  React.ElementRef<typeof HoverCardPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content>
->(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
-  <HoverCardPrimitive.Content
-    ref={ref}
-    align={align}
-    sideOffset={sideOffset}
-    className={cn(
-      "z-50 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-      className
-    )}
-    {...props}
-  />
-))
-HoverCardContent.displayName = HoverCardPrimitive.Content.displayName
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.2)",
+  },
+  card: {
+    width: 250,
+    padding: 16,
+    borderRadius: 12,
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 5,
+  },
+});
 
-export { HoverCard, HoverCardTrigger, HoverCardContent }
