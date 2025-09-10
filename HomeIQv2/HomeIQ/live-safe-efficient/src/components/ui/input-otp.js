@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { View, TextInput, Text, StyleSheet } from "react-native";
-import { Dot } from "lucide-react-native"; // use the RN version
+import { Dot } from "lucide-react-native"; 
 
 export const InputOTP = ({ length = 6, onChange }: any) => {
   const [otp, setOtp] = useState(Array(length).fill(""));
