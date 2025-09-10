@@ -1,24 +1,37 @@
-import * as React from "react"
-import * as LabelPrimitive from "@radix-ui/react-label"
-import { cva, type VariantProps } from "class-variance-authority"
+import React from "react";
+import { Text, StyleSheet, TextProps } from "react-native";
 
-import { cn } from "@/lib/utils"
+type LabelProps = TextProps & {
+  disabled?: boolean;
+};
 
-const labelVariants = cva(
-  "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-)
+export const Label = React.forwardRef<Text, LabelProps>(
+  ({ style, disabled, ...props }, ref) => {
+    return (
+      <Text
+        ref={ref}
+        style={[
+          styles.label,
+          disabled && styles.disabled,
+          style, // allow overrides
+        ]}
+        {...props}
+      />
+    );
+  }
+);
 
-const Label = React.forwardRef<
-  React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
-    VariantProps<typeof labelVariants>
->(({ className, ...props }, ref) => (
-  <LabelPrimitive.Root
-    ref={ref}
-    className={cn(labelVariants(), className)}
-    {...props}
-  />
-))
-Label.displayName = LabelPrimitive.Root.displayName
+Label.displayName = "Label";
 
-export { Label }
+const styles = StyleSheet.create({
+  label: {
+    fontSize: 14, // matches `text-sm`
+    fontWeight: "500", // matches `font-medium`
+    lineHeight: 18, // close to `leading-none`
+    color: "#000",
+  },
+  disabled: {
+    opacity: 0.7,
+  },
+});
+
