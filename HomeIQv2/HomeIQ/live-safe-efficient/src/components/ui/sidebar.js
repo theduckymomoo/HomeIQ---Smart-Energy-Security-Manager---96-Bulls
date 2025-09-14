@@ -88,7 +88,7 @@ const SidebarProvider = React.forwardRef(
 )
 SidebarProvider.displayName = "SidebarProvider"
 
-// --- Sidebar main component ---
+
 const Sidebar = React.forwardRef(
   ({ side = "left", variant = "sidebar", collapsible = "offcanvas", className, children, ...props }, ref) => {
     const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
@@ -162,7 +162,7 @@ const Sidebar = React.forwardRef(
 )
 Sidebar.displayName = "Sidebar"
 
-// --- SidebarTrigger, SidebarInput, SidebarHeader, SidebarFooter, etc. ---
+
 const SidebarTrigger = React.forwardRef(({ className, onClick, ...props }, ref) => {
   const { toggleSidebar } = useSidebar()
   return (
@@ -182,14 +182,12 @@ const SidebarTrigger = React.forwardRef(({ className, onClick, ...props }, ref) 
 })
 SidebarTrigger.displayName = "SidebarTrigger"
 
-// --- Other subcomponents like SidebarInput, SidebarHeader, SidebarFooter, SidebarMenu, SidebarMenuButton, etc. ---
-// You can follow the same pattern as SidebarTrigger: remove TS types and keep forwardRef + cn + props spread.
 
 export {
   Sidebar,
   SidebarProvider,
   SidebarTrigger,
   useSidebar,
-  // ...add other subcomponents here following same pattern
+  
 }
 
