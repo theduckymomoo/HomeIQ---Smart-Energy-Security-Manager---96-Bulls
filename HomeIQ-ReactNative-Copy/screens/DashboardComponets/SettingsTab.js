@@ -1,4 +1,4 @@
-// SettingsTab.js - Themed + hoisted modals
+// SettingsTab.js - Themed + hoisted modals + Language Coming Soon
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   View,
@@ -84,7 +84,7 @@ const SettingRow = ({ icon, title, subtitle, right, onPress, danger, border = tr
   </TouchableOpacity>
 );
 
-// ---------- HOISTED MODALS (so they exist before SettingsTab renders) ----------
+// ---------- HOISTED MODALS ----------
 function ChangePasswordModal({ visible, onClose, onSubmit }) {
   const [current, setCurrent] = useState('');
   const [next, setNext] = useState('');
@@ -369,6 +369,82 @@ function CurrencyModal({ visible, selected, onClose, onSelect }) {
   );
 }
 
+// NEW: Language Coming Soon modal
+function LanguageComingSoonModal({ visible, onClose, colors, themeDark }) {
+  return (
+    <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
+      <View style={styles.modalOverlay}>
+        <View style={[styles.modalCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+          <View style={[styles.modalHeader, { borderBottomColor: colors.border }]}>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>Language</Text>
+            <TouchableOpacity onPress={onClose}>
+              <MaterialIcons name="close" size={24} color={colors.subtext} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={[styles.modalBody, { alignItems: 'center' }]}>
+            {/* Big round icon */}
+            <View
+              style={{
+                width: 120,
+                height: 120,
+                borderRadius: 60,
+                backgroundColor: themeDark ? 'rgba(139,92,246,0.15)' : 'rgba(139,92,246,0.12)',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 16,
+              }}
+            >
+              <MaterialIcons name="language" size={48} color="#8B5CF6" />
+            </View>
+
+            <Text style={{ color: colors.text, fontSize: 28, fontWeight: '800', marginBottom: 8 }}>
+              Coming Soon
+            </Text>
+
+            <Text style={{ color: colors.subtext, fontSize: 16, textAlign: 'center', lineHeight: 22, marginBottom: 16 }}>
+              We’re adding multi-language support so you can personalize your HomeIQ experience.
+            </Text>
+
+            {/* bullets */}
+            <View style={{ width: '100%', paddingHorizontal: 8, marginBottom: 16 }}>
+              {[
+                'Switch the entire app language',
+                'Localized tips and guidance',
+                'Right-to-left support where needed',
+              ].map((t) => (
+                <View key={t} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 6 }}>
+                  <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: '#10b981', marginRight: 10 }} />
+                  <Text style={{ color: colors.text, fontSize: 16 }}>{t}</Text>
+                </View>
+              ))}
+            </View>
+
+            {/* badge */}
+            <View
+              style={{
+                backgroundColor: '#ffb300',
+                paddingVertical: 8,
+                paddingHorizontal: 18,
+                borderRadius: 12,
+                marginBottom: 12,
+              }}
+            >
+              <Text style={{ color: '#000', fontWeight: '800', letterSpacing: 0.5 }}>COMING SOON</Text>
+            </View>
+          </View>
+
+          <View style={[styles.modalActions, { borderTopColor: colors.border }]}>
+            <TouchableOpacity style={[styles.btnPrimary, { backgroundColor: colors.primary }]} onPress={onClose}>
+              <Text style={styles.btnPrimaryText}>Got It</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
 // ======================= MAIN: SettingsTab =======================
 export default function SettingsTab() {
   const { user, userProfile, supabase, updateProfile, signOut, getUserSettings, upsertUserSettings } = useAuth();
@@ -386,6 +462,7 @@ export default function SettingsTab() {
   const [aboutVisible, setAboutVisible] = useState(false);
   const [rateVisible, setRateVisible] = useState(false);
   const [currencyModalVisible, setCurrencyModalVisible] = useState(false);
+  const [languageSoonVisible, setLanguageSoonVisible] = useState(false); // NEW
 
   const [saving, setSaving] = useState(false);
   const [loadingSettings, setLoadingSettings] = useState(true);
@@ -401,7 +478,7 @@ export default function SettingsTab() {
   const [autoOptimize, setAutoOptimize] = useState(false);
   const [weeklyReports, setWeeklyReports] = useState(true);
   const [currency, setCurrency] = useState('ZAR');
-  const [language, setLanguage] = useState('English');
+  const [language, setLanguage] = useState('English'); // label only (kept)
   const [emailMarketing, setEmailMarketing] = useState(true);
   const [emailProduct, setEmailProduct] = useState(true);
 
@@ -515,7 +592,7 @@ export default function SettingsTab() {
         first_name: editProfile.firstName.trim(),
         last_name: editProfile.lastName.trim(),
         phone: editProfile.phone.trim(),
-      }}); // or your updateProfile() if that writes to profiles table
+      }});
       if (error) throw error;
       setProfileModalVisible(false);
       Alert.alert('Success', 'Profile updated.');
@@ -757,17 +834,18 @@ export default function SettingsTab() {
         <SectionHeader title="Locale" color={colors.subtext} />
         <View style={[styles.section, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <SettingRow icon="attach-money" title="Currency" subtitle={currency} onPress={() => setCurrencyModalVisible(true)} colors={colors} />
+
+          {/* Language row now shows COMING SOON badge + opens modal */}
           <SettingRow
             icon="language"
             title="Language"
-            subtitle={language}
-            onPress={() => {
-              const opts = ['English', 'Afrikaans', 'Xhosa', 'Zulu'];
-              Alert.alert('Language', 'Choose app language', [
-                ...opts.map(l => ({ text: l, onPress: () => { setLanguage(l); saveSetting({ language: l }); } })),
-                { text: 'Cancel', style: 'cancel' },
-              ]);
-            }}
+            subtitle="App localization"
+            onPress={() => setLanguageSoonVisible(true)}
+            right={
+              <View style={{ backgroundColor: '#ffb300', paddingVertical: 4, paddingHorizontal: 10, borderRadius: 8 }}>
+                <Text style={{ color: '#000', fontWeight: '800', fontSize: 12 }}>COMING SOON</Text>
+              </View>
+            }
             border={false}
             colors={colors}
           />
@@ -920,6 +998,9 @@ export default function SettingsTab() {
         onClose={() => setCurrencyModalVisible(false)}
         onSelect={(code) => { setCurrency(code); saveSetting({ currency: code }); setGlobalCurrency(code); setCurrencyModalVisible(false); }}
       />
+
+      {/* NEW: Language Coming Soon */}
+      <LanguageComingSoonModal visible={languageSoonVisible} onClose={() => setLanguageSoonVisible(false)} colors={colors} themeDark={themeDark} />
 
       <RateAppModal visible={rateVisible} onClose={() => setRateVisible(false)} onSubmit={handleRateSubmit} />
 
