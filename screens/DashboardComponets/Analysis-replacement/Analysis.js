@@ -52,9 +52,9 @@ const COLORS = {
   info: '#06b6d4',
   
   // Backgrounds
-  bgPrimary: '#0f172a',
-  bgSecondary: '#1e293b',
-  bgTertiary: '#334155',
+  bgPrimary: '#040404ff',
+  bgSecondary: '#131313ff',
+  bgTertiary: '#010101ff',
   
   // Text
   textPrimary: '#f1f5f9',
@@ -531,87 +531,95 @@ export default function AnalysisTab({ appliances: propAppliances = [], stats = {
     }
   };
 
-  // Render pie chart - FIXED VERSION
-  const renderPieChart = () => {
-    try {
-      const { roomData, totalPower } = getRoomData();
-      const activeRooms = Object.entries(roomData)
-        .filter(([, data]) => data && data.activePower > 0)
-        .sort(([,a], [,b]) => (b.activePower || 0) - (a.activePower || 0))
-        .slice(0, 6);
+const renderPieChart = () => {
+  try {
+    const { roomData, totalPower } = getRoomData();
+    const activeRooms = Object.entries(roomData)
+      .filter(([, data]) => data && data.activePower > 0)
+      .sort(([,a], [,b]) => (b.activePower || 0) - (a.activePower || 0))
+      .slice(0, 6);
 
-      if (activeRooms.length === 0 || totalPower === 0) {
-        return (
-          <View style={styles.emptyState}>
-            <MaterialIcons name="pie-chart" size={48} color={COLORS.textTertiary} style={styles.emptyIcon} />
-            <Text style={styles.emptyTitle}>No room data</Text>
-            <Text style={styles.emptySubtitle}>Turn on devices in different rooms</Text>
-          </View>
-        );
-      }
-
-      // FIXED: PieChart expects a flat array, not the datasets format
-      const pieData = activeRooms.map(([roomName, roomInfo], index) => ({
-        name: roomName.substring(0, 10),
-        population: parseFloat(roomInfo.activePower) || 0,
-        color: COLORS.chartColors[index % COLORS.chartColors.length],
-        legendFontColor: COLORS.textSecondary,
-        legendFontSize: 12
-      }));
-
-      return (
-        <View>
-          <Text style={styles.chartSubtitle}>Power distribution across {activeRooms.length} rooms</Text>
-          <View style={styles.chartContainer}>
-            <PieChart
-              data={pieData}
-              width={width - 48}
-              height={260}
-              chartConfig={{
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              }}
-              accessor="population"
-              backgroundColor="transparent"
-              paddingLeft="15"
-              style={styles.chart}
-              hasLegend={false}
-            />
-          </View>
-          <View style={styles.legend}>
-            {activeRooms.map(([roomName, roomInfo], index) => {
-              const percentage = totalPower > 0 ? Math.round((roomInfo.activePower / totalPower) * 100) : 0;
-              return (
-                <TouchableOpacity
-                  key={roomName}
-                  onPress={() => {
-                    setSelectedRoom(roomName);
-                    setShowRoomModal(true);
-                  }}
-                  style={styles.legendItem}
-                  activeOpacity={0.7}
-                >
-                  <View style={[styles.legendDot, { backgroundColor: COLORS.chartColors[index % COLORS.chartColors.length] }]} />
-                  <Text style={styles.legendText}>
-                    {roomName}: {percentage}% ({roomInfo.activePower}W)
-                  </Text>
-                  <MaterialIcons name="chevron-right" size={16} color={COLORS.textTertiary} />
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
-      );
-    } catch (error) {
-      console.error('Pie chart error:', error);
+    if (activeRooms.length === 0 || totalPower === 0) {
       return (
         <View style={styles.emptyState}>
-          <MaterialIcons name="error" size={48} color={COLORS.danger} style={styles.emptyIcon} />
-          <Text style={styles.emptyTitle}>Chart error</Text>
-          <Text style={styles.emptySubtitle}>{error.message}</Text>
+          <MaterialIcons name="pie-chart" size={48} color={COLORS.textTertiary} style={styles.emptyIcon} />
+          <Text style={styles.emptyTitle}>No room data</Text>
+          <Text style={styles.emptySubtitle}>Turn on devices in different rooms</Text>
         </View>
       );
     }
-  };
+
+    const pieData = activeRooms.map(([roomName, roomInfo], index) => ({
+      name: roomName.substring(0, 10),
+      population: parseFloat(roomInfo.activePower) || 0,
+      color: COLORS.chartColors[index % COLORS.chartColors.length],
+      legendFontColor: COLORS.textSecondary,
+      legendFontSize: 12
+    }));
+
+    return (
+      <View>
+        <Text style={styles.chartSubtitle}>
+          Power distribution across {activeRooms.length} rooms
+        </Text>
+        
+        {/* CENTERED PIE CHART - Remove paddingLeft, use container centering */}
+        <View style={styles.pieChartContainer}>
+          <PieChart
+            data={pieData}
+            width={width - 40}
+            height={250}
+            chartConfig={{
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            }}
+            accessor="population"
+            backgroundColor="transparent"
+            paddingLeft="0"
+            paddingRight="0"
+            style={styles.chartCentered}
+            hasLegend={false}
+          />
+        </View>
+
+        {/* LEGEND BELOW CHART */}
+        <View style={styles.legend}>
+          {activeRooms.map(([roomName, roomInfo], index) => {
+            const percentage = totalPower > 0 ? Math.round((roomInfo.activePower / totalPower) * 100) : 0;
+            return (
+              <TouchableOpacity
+                key={roomName}
+                onPress={() => {
+                  setSelectedRoom(roomName);
+                  setShowRoomModal(true);
+                }}
+                style={styles.legendItem}
+                activeOpacity={0.7}
+              >
+                <View
+                  style={[
+                    styles.legendDot,
+                    { backgroundColor: COLORS.chartColors[index % COLORS.chartColors.length] }
+                  ]}
+                />
+                <Text style={styles.legendText}>
+                  {roomName}: {percentage}% ({roomInfo.activePower}W)
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+    );
+  } catch (error) {
+    console.error('Pie chart error:', error);
+    return (
+      <View style={styles.emptyState}>
+        <Text style={styles.emptyTitle}>Chart error</Text>
+        <Text style={styles.emptySubtitle}>{error.message}</Text>
+      </View>
+    );
+  }
+};
 
   // Room modal
   const renderRoomModal = () => {
@@ -1420,6 +1428,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '800',
   },
+pieChartContainer: {
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginVertical: SPACING.lg,
+  width: '100%',
+},
+chartCentered: {
+  alignSelf: 'center',
+  borderRadius: 16,
+  marginVertical: SPACING.sm,
+},
   devicePowerOff: {
     color: COLORS.textTertiary,
   },
