@@ -1,856 +1,553 @@
-// AnalysisStyles.js - Complete styles file with performance optimizations
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+// Professional Color System
+const COLORS = {
+  primary: '#10b981',
+  secondary: '#3b82f6',
+  accent: '#8b5cf6',
+  danger: '#ef4444',
+  warning: '#f59e0b',
+  info: '#06b6d4',
+  // Backgrounds
+  bgPrimary: '#0f172a',
+  bgSecondary: '#1e293b',
+  bgTertiary: '#334155',
+  // Text
+  textPrimary: '#f1f5f9',
+  textSecondary: '#cbd5e1',
+  textTertiary: '#64748b',
+  // Chart colors
+  chartColors: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'],
+};
 
-export const styles = StyleSheet.create({
-  // Base Layout
+// Spacing System
+const SPACING = {
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 20,
+  xxl: 24,
+};
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0b',
+    backgroundColor: COLORS.bgPrimary,
   },
-  content: {
+  scrollView: {
     flex: 1,
   },
-  scrollContent: {
-    paddingBottom: 32,
-    flexGrow: 1,
-  },
-
-  // Loading States
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#0a0a0b',
-  },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: '#a1a1aa',
-    fontWeight: '500',
-  },
-
-  // Header Section
   header: {
+    padding: SPACING.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.bgSecondary,
+    backgroundColor: COLORS.bgSecondary,
+  },
+  headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    paddingBottom: 16,
-    backgroundColor: 'transparent', // CHANGED: removed gray background
+    alignItems: 'flex-start',
+    marginBottom: SPACING.sm,
   },
-  pageTitle: {
+  headerTitle: {
     fontSize: 28,
-    fontWeight: '800',
-    color: '#ffffff',
+    fontWeight: '900',
+    color: COLORS.textPrimary,
     letterSpacing: -0.5,
   },
-  subtitle: {
+  headerSubtitle: {
     fontSize: 14,
-    color: '#a1a1aa',
-    marginTop: 4,
+    color: COLORS.textSecondary,
+    marginTop: SPACING.xs,
     fontWeight: '500',
   },
-
-  // Live Indicator
-  liveIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+  lastUpdate: {
+    fontSize: 12,
+    color: COLORS.textTertiary,
+    fontWeight: '500',
+  },
+  liveBadge: {
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 4,
   },
   liveDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#10b981',
-    marginRight: 6,
+    backgroundColor: '#fff',
   },
   liveText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#10b981',
+    color: '#fff',
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 1,
   },
-
-  // Statistics Cards - Optimized
-  statsContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
-  },
-  statsRow: {
+  statsGrid: {
     flexDirection: 'row',
-    gap: 10,
-    marginBottom: 10,
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginHorizontal: SPACING.lg,
+    marginVertical: SPACING.md,
   },
   statCard: {
-    flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)', // CHANGED: lighter gray
-    borderRadius: 16,
-    padding: 14,
+    backgroundColor: COLORS.bgSecondary,
+    width: '31%',
     alignItems: 'center',
+    borderRadius: 16,
+    padding: SPACING.lg,
+    marginBottom: SPACING.md,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)', // CHANGED: lighter border
-    minHeight: 90,
-    justifyContent: 'center',
+    borderColor: COLORS.bgTertiary,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
   },
   statValue: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '800',
-    color: '#ffffff',
-    marginTop: 6,
-    letterSpacing: -0.3,
-    textAlign: 'center',
+    color: COLORS.primary,
+    marginTop: SPACING.xs,
   },
   statLabel: {
+    color: COLORS.textSecondary,
+    fontWeight: '600',
     fontSize: 11,
-    color: '#a1a1aa',
-    marginTop: 4,
-    fontWeight: '500',
+    marginTop: SPACING.xs,
     textAlign: 'center',
   },
-
-  // Chart Controls
-  chartControls: {
-    paddingHorizontal: 20,
-    marginBottom: 16,
-  },
-  timeRangeContainer: {
-    flexDirection: 'row',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)', // CHANGED: lighter gray
-    borderRadius: 12,
-    padding: 3,
-    marginBottom: 12,
+  section: {
+    backgroundColor: COLORS.bgSecondary,
+    marginHorizontal: SPACING.lg,
+    marginBottom: SPACING.lg,
+    borderRadius: 16,
+    padding: SPACING.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)', // CHANGED: lighter border
+    borderColor: COLORS.bgTertiary,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  timeRangeButton: {
-    flex: 1,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 9,
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: SPACING.md,
   },
-  timeRangeButtonActive: {
-    backgroundColor: '#10b981',
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: COLORS.textPrimary,
+    letterSpacing: -0.3,
   },
-  timeRangeText: {
-    fontSize: 13,
-    color: '#a1a1aa',
-    fontWeight: '600',
-  },
-  timeRangeTextActive: {
-    color: '#ffffff',
-    fontWeight: '700',
-  },
-  chartTypeContainer: {
+  chartControls: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)', // CHANGED: lighter gray
-    borderRadius: 12,
-    padding: 3,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)', // CHANGED: lighter border
+    gap: SPACING.sm,
   },
   chartTypeButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 6,
-    borderRadius: 9,
+    padding: SPACING.md,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: COLORS.primary,
+    gap: SPACING.sm,
+    backgroundColor: 'transparent',
   },
   chartTypeButtonActive: {
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
-    borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
+    backgroundColor: COLORS.primary,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 4,
   },
-  chartTypeText: {
-    fontSize: 11,
-    color: '#a1a1aa',
-    marginLeft: 4,
-    fontWeight: '600',
-  },
-  chartTypeTextActive: {
-    color: '#10b981',
+  chartTypeLabel: {
+    color: COLORS.primary,
     fontWeight: '700',
+    fontSize: 13,
   },
-
-  // Chart Container - FIXED with proper sizing
-  chartContainer: {
-    marginHorizontal: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.03)', // CHANGED: much lighter gray
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)', // CHANGED: lighter border
-    overflow: 'visible',
-  },
-  chartHeader: {
-    marginBottom: 12,
-    alignItems: 'flex-start',
-  },
-  chartTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#ffffff',
+  chartTypeLabelActive: {
+    color: '#fff',
   },
   chartSubtitle: {
-    fontSize: 12,
-    color: '#a1a1aa',
+    fontSize: 13,
+    color: COLORS.textSecondary,
+    marginBottom: SPACING.md,
     fontWeight: '500',
-    textAlign: 'center',
-    marginBottom: 16,
   },
-
-  // Enhanced Bar Chart - FIXED dimensions
-  barChartContainer: {
-    width: '100%',
-    minHeight: 300,
-    paddingVertical: 8,
-  },
-  chartRow: {
-    flexDirection: 'row',
+  chartContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
-    height: 32,
-    paddingHorizontal: 2,
+    marginVertical: SPACING.sm,
   },
-  deviceLabel: {
-    fontSize: 12,
-    color: '#ffffff',
-    fontWeight: '600',
-    width: 85,
-    flexShrink: 0,
+  chart: {
+    borderRadius: 16,
+    marginVertical: SPACING.sm,
   },
-  barContainer: {
-    flex: 1,
-    height: 24,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    borderRadius: 12,
-    marginHorizontal: 8,
-    justifyContent: 'center',
-    overflow: 'hidden',
+  emptyState: {
+    alignItems: 'center',
+    padding: SPACING.xxl * 2,
   },
-  bar: {
-    height: '100%',
-    borderRadius: 12,
-    minWidth: 20,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    paddingLeft: 6,
+  emptyIcon: {
+    marginBottom: SPACING.lg,
+    opacity: 0.5,
   },
-  barLabel: {
-    fontSize: 9,
-    color: '#ffffff',
+  emptyTitle: {
+    fontSize: 18,
     fontWeight: '700',
-  },
-  usageLabel: {
-    fontSize: 10,
-    color: '#a1a1aa',
-    fontWeight: '500',
-    width: 50,
-    textAlign: 'right',
-    flexShrink: 0,
-  },
-
-  // Enhanced Line Chart - FIXED dimensions
-  lineChartContainer: {
-    width: '100%',
-    minHeight: 220,
-    paddingVertical: 8,
-  },
-  lineChartWrapper: {
-    flexDirection: 'row',
-    height: 120,
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-    paddingHorizontal: 6,
-    paddingBottom: 20,
-    marginVertical: 12,
-    backgroundColor: 'transparent', // CHANGED: removed gray background
-    borderRadius: 8,
-  },
-  lineChartBar: {
-    flex: 1,
-    alignItems: 'center',
-    height: '100%',
-    justifyContent: 'flex-end',
-    marginHorizontal: 1,
-  },
-  lineChartPoint: {
-    backgroundColor: '#10b981',
-    borderRadius: 2,
-    marginBottom: 6,
-    width: 4,
-  },
-  lineChartValue: {
-    fontSize: 8,
-    color: '#10b981',
-    fontWeight: '600',
-    marginBottom: 3,
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.sm,
     textAlign: 'center',
   },
-  lineChartLabel: {
-    fontSize: 7,
-    color: '#a1a1aa',
-    fontWeight: '500',
+  emptySubtitle: {
+    fontSize: 14,
+    color: COLORS.textSecondary,
     textAlign: 'center',
-    marginTop: 3,
+    lineHeight: 20,
   },
-
-  // Enhanced Pie Chart - FIXED dimensions
-  pieChartContainer: {
-    width: '100%',
-    minHeight: 280,
-    paddingVertical: 8,
-    alignItems: 'center',
-  },
-  pieChartLegend: {
-    width: '100%',
-    marginTop: 16,
-  },
-  pieChartLegendItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.03)', // CHANGED: lighter gray
-    borderRadius: 8,
-    marginBottom: 6,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.06)', // CHANGED: lighter border
-  },
-  pieChartLegendDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginRight: 12,
-  },
-  pieChartLegendText: {
-    fontSize: 12,
-    color: '#ffffff',
-    fontWeight: '500',
-    flex: 1,
-  },
-
-  // Chart Legend
-  chartLegend: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    marginTop: 12,
-    paddingTop: 12,
+  legend: {
+    marginTop: SPACING.lg,
+    paddingTop: SPACING.lg,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: COLORS.bgTertiary,
   },
   legendItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 3,
-    paddingHorizontal: 6,
-    paddingVertical: 3,
-    backgroundColor: 'rgba(255, 255, 255, 0.02)', // CHANGED: lighter gray
-    borderRadius: 6,
+    gap: SPACING.sm,
+    marginBottom: SPACING.sm,
+    padding: SPACING.sm,
+    borderRadius: 8,
   },
   legendDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 4,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 2,
   },
   legendText: {
-    fontSize: 9,
-    color: '#a1a1aa',
+    color: COLORS.textSecondary,
+    fontSize: 13,
     fontWeight: '500',
+    flex: 1,
   },
-
-  // No Data States - Optimized
-  noDataContainer: {
-    minHeight: 160,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 16,
-    backgroundColor: 'transparent', // CHANGED: removed gray background
-    borderRadius: 8,
-    marginVertical: 6,
+  deviceDetailsList: {
+    marginTop: SPACING.lg,
+    gap: SPACING.sm,
   },
-  noDataText: {
-    fontSize: 14,
-    color: '#a1a1aa',
-    marginTop: 10,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  noDataSubtext: {
-    fontSize: 12,
-    color: '#6b7280',
-    marginTop: 4,
-    fontWeight: '500',
-    textAlign: 'center',
-    paddingHorizontal: 16,
-    lineHeight: 16,
-  },
-
-  // Active Devices Section
-  activeDevicesContainer: {
-    marginHorizontal: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.03)', // CHANGED: lighter gray
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)', // CHANGED: lighter border
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#ffffff',
-    marginBottom: 12,
-  },
-  deviceItem: {
+  deviceDetailItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.06)',
-    borderRadius: 8,
-    marginBottom: 4,
-    backgroundColor: 'transparent', // CHANGED: removed gray background
+    padding: SPACING.md,
+    backgroundColor: COLORS.bgTertiary,
+    borderRadius: 12,
   },
-  deviceInfo: {
+  deviceDetailLeft: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: SPACING.md,
     flex: 1,
   },
-  deviceDetails: {
-    marginLeft: 12,
-    flex: 1,
+  deviceDetailRank: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: COLORS.primary,
+    width: 28,
   },
-  deviceName: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#ffffff',
+  deviceDetailName: {
+    color: COLORS.textPrimary,
+    fontSize: 14,
+    fontWeight: '700',
   },
-  deviceRoom: {
+  deviceDetailRoom: {
+    color: COLORS.textTertiary,
     fontSize: 12,
-    color: '#a1a1aa',
     marginTop: 2,
     fontWeight: '500',
   },
-  devicePowerContainer: {
+  deviceDetailPower: {
+    color: COLORS.primary,
+    fontSize: 16,
+    fontWeight: '800',
+  },
+  deviceCountBadge: {
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  deviceCountText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  deviceListItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: SPACING.md,
+    backgroundColor: COLORS.bgTertiary,
+    borderRadius: 12,
+    marginBottom: SPACING.sm,
+  },
+  deviceListLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: SPACING.md,
+    flex: 1,
   },
-  devicePower: {
-    fontSize: 14,
+  deviceStatusIndicator: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
+  deviceListName: {
+    color: COLORS.textPrimary,
+    fontSize: 15,
     fontWeight: '700',
-    color: '#10b981',
-    minWidth: 45,
-    textAlign: 'right',
   },
-
-  // Info boxes
-  chartInfoBox: {
-    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-    borderRadius: 8,
-    padding: 8,
-    marginTop: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(59, 130, 246, 0.2)',
+  deviceListMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 4,
+  },
+  deviceListInfo: {
+    color: COLORS.textTertiary,
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  deviceListDivider: {
+    color: COLORS.textTertiary,
+    fontSize: 12,
+  },
+  deviceListPower: {
+    color: COLORS.primary,
+    fontSize: 16,
+    fontWeight: '800',
+  },
+  deviceListPowerOff: {
+    color: COLORS.textTertiary,
+  },
+  actionButtons: {
+    marginHorizontal: SPACING.lg,
+    gap: SPACING.md,
+  },
+  simulatorButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: COLORS.accent,
+    padding: SPACING.lg,
+    borderRadius: 16,
+    gap: SPACING.md,
+    shadowColor: COLORS.accent,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 5,
   },
-  chartInfoText: {
-    fontSize: 10,
-    color: '#3b82f6',
-    fontWeight: '500',
-    textAlign: 'center',
-    marginLeft: 4,
+  simulatorButtonText: {
+    color: '#fff',
+    fontSize: 17,
+    fontWeight: '800',
   },
-
-  // Debug info
-  debugInfo: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    padding: 8,
-    margin: 20,
+  betaBadge: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
-  debugText: {
-    color: '#ffffff',
-    fontSize: 11,
-    fontFamily: 'monospace',
-    lineHeight: 14,
+  betaText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '800',
   },
-
-  // COMPLETE MODAL STYLES
+  refreshButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.primary,
+    padding: SPACING.lg,
+    borderRadius: 16,
+    gap: SPACING.md,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  refreshButtonText: {
+    color: '#fff',
+    fontSize: 17,
+    fontWeight: '800',
+  },
   modalContainer: {
     flex: 1,
-    backgroundColor: '#0a0a0b',
+    backgroundColor: COLORS.bgPrimary,
   },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
-    paddingTop: 16,
+    padding: SPACING.lg,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
-    backgroundColor: 'transparent', // CHANGED: removed gray background
+    borderBottomColor: COLORS.bgSecondary,
+    backgroundColor: COLORS.bgSecondary,
   },
-  modalCancel: {
-    fontSize: 16,
-    color: '#10b981',
-    fontWeight: '600',
+  modalHeaderButton: {
+    padding: SPACING.sm,
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#ffffff',
-    textAlign: 'center',
-    flex: 1,
+    fontSize: 20,
+    fontWeight: '800',
+    color: COLORS.textPrimary,
+    letterSpacing: -0.3,
   },
   modalSummary: {
     flexDirection: 'row',
-    padding: 20,
-    backgroundColor: 'transparent', // CHANGED: removed gray background
-    gap: 12,
-  },
-  modalSummaryItem: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)', // CHANGED: lighter gray
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)', // CHANGED: lighter border
-  },
-  modalSummaryValue: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#ffffff',
-    marginTop: 4,
-  },
-  modalSummaryLabel: {
-    fontSize: 11,
-    color: '#a1a1aa',
-    marginTop: 2,
-    fontWeight: '500',
-    textAlign: 'center',
-  },
-
-  // Room Modal Items
-  roomModalItem: {
-    backgroundColor: 'rgba(255, 255, 255, 0.03)', // CHANGED: lighter gray
+    justifyContent: 'space-around',
+    padding: SPACING.xl,
+    backgroundColor: COLORS.bgSecondary,
+    marginHorizontal: SPACING.lg,
+    marginVertical: SPACING.lg,
     borderRadius: 16,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)', // CHANGED: lighter border
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  roomModalHeader: {
+  summaryItem: {
+    alignItems: 'center',
+    gap: SPACING.xs,
+  },
+  summaryValue: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: COLORS.primary,
+  },
+  summaryLabel: {
+    fontSize: 12,
+    color: COLORS.textSecondary,
+    fontWeight: '600',
+  },
+  roomModalItem: {
+    backgroundColor: COLORS.bgSecondary,
+    padding: SPACING.lg,
+    borderRadius: 16,
+    marginBottom: SPACING.lg,
+    borderWidth: 1,
+    borderColor: COLORS.bgTertiary,
+  },
+  roomHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: SPACING.sm,
   },
-  roomModalDot: {
+  roomHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.md,
+  },
+  roomColorIndicator: {
     width: 16,
     height: 16,
     borderRadius: 8,
-    marginRight: 12,
   },
-  roomModalTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#ffffff',
-  },
-  roomModalPower: {
+  roomName: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#10b981',
-    textAlign: 'right',
+    color: COLORS.textPrimary,
   },
-  roomModalPercentage: {
-    fontSize: 12,
-    color: '#a1a1aa',
-    fontWeight: '600',
-    textAlign: 'right',
-    marginTop: 2,
+  roomPower: {
+    fontSize: 24,
+    fontWeight: '900',
+    color: COLORS.primary,
   },
-  roomModalStats: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 12,
-    paddingTop: 8,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.06)',
-  },
-  roomModalStat: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.03)',
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    borderRadius: 8,
-  },
-  roomModalStatText: {
-    fontSize: 11,
-    color: '#a1a1aa',
-    fontWeight: '500',
-  },
-  roomModalDevices: {
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.08)',
-    paddingTop: 12,
-  },
-  roomModalDevicesTitle: {
+  roomPercentage: {
+    color: COLORS.textSecondary,
     fontSize: 14,
-    fontWeight: '600',
-    color: '#ffffff',
-    marginBottom: 8,
-  },
-  roomModalDevice: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    gap: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.02)',
-    borderRadius: 6,
-    marginBottom: 3,
-  },
-  roomModalDeviceName: {
-    fontSize: 13,
+    marginBottom: SPACING.md,
     fontWeight: '500',
-    flex: 1,
-    color: '#ffffff',
   },
-  roomModalDevicePower: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#10b981',
-    minWidth: 45,
-    textAlign: 'right',
-  },
-
-  // Real-time Data Section - Simplified
-  realTimeContainer: {
-    marginHorizontal: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.03)', // CHANGED: lighter gray
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)', // CHANGED: lighter border
-  },
-  realTimeHeader: {
+  roomStats: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 12,
-  },
-  liveIndicatorSmall: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  liveDotSmall: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#10b981',
-    marginRight: 4,
-  },
-  liveTextSmall: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: '#10b981',
-  },
-  dataPoint: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 10,
+    gap: SPACING.lg,
+    marginBottom: SPACING.md,
+    paddingVertical: SPACING.md,
+    borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.04)',
-    borderRadius: 6,
-    marginBottom: 3,
-    backgroundColor: 'transparent', // CHANGED: removed gray background
+    borderColor: COLORS.bgTertiary,
   },
-  dataTime: {
-    fontSize: 11,
-    color: '#a1a1aa',
-    fontWeight: '500',
-    width: 65,
-  },
-  dataValue: {
-    fontSize: 12,
-    color: '#ffffff',
-    fontWeight: '600',
-    flex: 1,
-    textAlign: 'center',
-  },
-
-  // Empty State
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 40,
-    paddingHorizontal: 30,
-    minHeight: 200,
-  },
-  emptyTitle: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#ffffff',
-    marginTop: 12,
-    marginBottom: 6,
-    textAlign: 'center',
-  },
-  emptyText: {
-    fontSize: 14,
-    color: '#a1a1aa',
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-
-  // Performance optimized styles
-  fastRefreshButton: {
-    backgroundColor: '#10b981',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 10,
+  roomStatItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    alignSelf: 'center',
-    marginVertical: 10,
+    gap: SPACING.xs,
   },
-  fastRefreshText: {
-    color: '#ffffff',
-    fontWeight: '700',
+  roomStat: {
+    color: COLORS.textSecondary,
     fontSize: 13,
+    fontWeight: '600',
   },
-
-  // Utility Classes
-  row: {
+  deviceListTitle: {
+    color: COLORS.textPrimary,
+    fontSize: 15,
+    fontWeight: '700',
+    marginTop: SPACING.md,
+    marginBottom: SPACING.sm,
+  },
+  deviceItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: SPACING.md,
+    backgroundColor: COLORS.bgTertiary,
+    borderRadius: 12,
+    marginBottom: SPACING.sm,
+  },
+  deviceItemLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  spaceBetween: {
-    justifyContent: 'space-between',
-  },
-  center: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  flex1: {
+    gap: SPACING.md,
     flex: 1,
   },
-  textCenter: {
-    textAlign: 'center',
+  deviceName: {
+    color: COLORS.textPrimary,
+    fontSize: 14,
+    fontWeight: '600',
   },
-  textBold: {
-    fontWeight: '700',
+  devicePower: {
+    color: COLORS.primary,
+    fontSize: 14,
+    fontWeight: '800',
   },
-  textMedium: {
-    fontWeight: '500',
-  },
-  marginBottom8: {
-    marginBottom: 8,
-  },
-  marginBottom12: {
-    marginBottom: 12,
-  },
-  marginBottom16: {
-    marginBottom: 16,
-  },
-  paddingHorizontal8: {
-    paddingHorizontal: 8,
-  },
-  paddingHorizontal12: {
-    paddingHorizontal: 12,
-  },
-  paddingHorizontal16: {
-    paddingHorizontal: 16,
-  },
-  paddingVertical8: {
-    paddingVertical: 8,
-  },
-  paddingVertical12: {
-    paddingVertical: 12,
-  },
-  borderRadius8: {
-    borderRadius: 8,
-  },
-  borderRadius12: {
-    borderRadius: 12,
-  },
-  borderRadius16: {
-    borderRadius: 16,
-  },
-
-  // Color utilities
-  textPrimary: {
-    color: '#ffffff',
-  },
-  textSecondary: {
-    color: '#a1a1aa',
-  },
-  textMuted: {
-    color: '#6b7280',
-  },
-  textSuccess: {
-    color: '#10b981',
-  },
-  textWarning: {
-    color: '#f59e0b',
-  },
-  textError: {
-    color: '#ef4444',
-  },
-  textInfo: {
-    color: '#3b82f6',
-  },
-  bgTransparent: {
-    backgroundColor: 'transparent',
-  },
-  bgPrimary: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)', // CHANGED: lighter gray
-  },
-  bgSecondary: {
-    backgroundColor: 'rgba(255, 255, 255, 0.03)', // CHANGED: lighter gray
-  },
-  bgSuccess: {
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
-  },
-  bgWarning: {
-    backgroundColor: 'rgba(245, 158, 11, 0.15)',
-  },
-  bgError: {
-    backgroundColor: 'rgba(239, 68, 68, 0.15)',
-  },
-  bgInfo: {
-    backgroundColor: 'rgba(59, 130, 246, 0.15)',
+  devicePowerOff: {
+    color: COLORS.textTertiary,
   },
 });
+
+export { COLORS, SPACING, styles };

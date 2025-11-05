@@ -14,8 +14,8 @@ import ProfileSetupScreen from './screens/ProfileSetupScreen';
 import Dashboard from './screens/Dashboard';
 import Setting from './screens/Settings';
 
-// Analysis Screens
-import MLAnalytics from './screens/DashboardComponets/Analysis/MLAnalytics';
+// Analysis Screens - REPLACED MLAnalytics with SmartSimulator
+import SmartSimulator from './screens/DashboardComponets/ML/SmartSimulator';
 
 // Admin Screens
 import AdminScreen from './screens/AdminScreen';
@@ -35,7 +35,6 @@ export default function App() {
           initialRouteName="Landing"
           screenOptions={{
             headerShown: false,
-            animation: 'slide_from_right',
           }}
         >
           {/* Auth Flow */}
@@ -43,15 +42,15 @@ export default function App() {
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="ProfileSetup" component={ProfileSetupScreen} />
-          
+
           {/* Main App */}
           <Stack.Screen name="Dashboard" component={Dashboard} />
           <Stack.Screen name="Settings" component={Setting} />
           <Stack.Screen name="HelpFAQ" component={HelpFAQScreen} />
-          
-          {/* Analysis Flow */}
-          <Stack.Screen name="MLAnalytics" component={MLAnalytics} />
-          
+
+          {/* Analysis Flow - Now uses SmartSimulator instead of MLAnalytics */}
+          <Stack.Screen name="SmartSimulator" component={SmartSimulator} />
+
           {/* Admin Flow */}
           <Stack.Screen name="AdminScreen" component={AdminScreen} />
           <Stack.Screen name="ManageDevices" component={ManageDevicesScreen} />
@@ -59,8 +58,8 @@ export default function App() {
           <Stack.Screen name="Reports" component={ReportsScreen} />
           <Stack.Screen name="SystemSettings" component={SystemSettingsScreen} />
         </Stack.Navigator>
+        <StatusBar style="auto" />
       </NavigationContainer>
-      <StatusBar style="light" />
     </AuthProvider>
   );
 }

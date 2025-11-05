@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
     borderBottomColor: 'rgba(255, 255, 255, 0.06)',
     backgroundColor: '#0a0a0b',
   },
+
   title: {
     fontSize: 24,
     fontWeight: '800',
@@ -28,6 +29,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     letterSpacing: -0.5,
   },
+
   closeButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     paddingHorizontal: 14,
@@ -49,6 +51,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.08)',
   },
+
   tab: {
     flex: 1,
     flexDirection: 'row',
@@ -58,16 +61,19 @@ export const styles = StyleSheet.create({
     borderRadius: 9,
     gap: 6,
   },
+
   activeTab: {
     backgroundColor: 'rgba(16, 185, 129, 0.15)',
     borderWidth: 1,
     borderColor: 'rgba(16, 185, 129, 0.3)',
   },
+
   tabText: {
     color: '#a1a1aa',
     fontSize: 12,
     fontWeight: '700',
   },
+
   activeTabText: {
     color: '#10b981',
   },
@@ -77,9 +83,11 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#0a0a0b',
   },
+
   tabContentScroll: {
     flex: 1,
   },
+
   scrollContentContainer: {
     paddingBottom: 120,
   },
@@ -91,6 +99,7 @@ export const styles = StyleSheet.create({
     color: '#ffffff',
     marginBottom: 6,
   },
+
   sectionDescription: {
     fontSize: 12,
     color: '#a1a1aa',
@@ -110,6 +119,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.08)',
   },
+
   dayTypeButton: {
     flex: 1,
     flexDirection: 'row',
@@ -119,14 +129,17 @@ export const styles = StyleSheet.create({
     borderRadius: 9,
     gap: 6,
   },
+
   activeDayType: {
     backgroundColor: '#10b981',
   },
+
   dayTypeText: {
     color: '#a1a1aa',
     fontSize: 12,
     fontWeight: '700',
   },
+
   activeDayTypeText: {
     color: '#ffffff',
   },
@@ -141,9 +154,11 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.08)',
   },
+
   presetsGrid: {
     gap: 10,
   },
+
   presetButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -155,14 +170,17 @@ export const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.08)',
     gap: 12,
   },
+
   presetInfo: {
     flex: 1,
   },
+
   presetTitle: {
     color: '#ffffff',
     fontSize: 14,
     fontWeight: '700',
   },
+
   presetDescription: {
     color: '#a1a1aa',
     fontSize: 11,
@@ -180,9 +198,11 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.08)',
   },
+
   deviceScrollContainer: {
     maxHeight: 280,
   },
+
   deviceItem: {
     backgroundColor: 'transparent',
     borderRadius: 12,
@@ -192,24 +212,29 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255, 255, 255, 0.06)',
   },
+
   selectedDeviceItem: {
     backgroundColor: 'rgba(16, 185, 129, 0.08)',
     borderBottomColor: '#10b981',
     borderBottomWidth: 2,
   },
+
   deviceHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+
   deviceInfo: {
     flex: 1,
   },
+
   deviceName: {
     color: '#ffffff',
     fontSize: 14,
     fontWeight: '700',
   },
+
   deviceType: {
     color: '#a1a1aa',
     fontSize: 12,
@@ -227,6 +252,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.08)',
   },
+
   schedulerTitle: {
     color: '#ffffff',
     fontSize: 14,
@@ -235,7 +261,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  // Hour Grid - Improved
+  // Hour Grid - Improved with drag support
   hourGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -243,6 +269,7 @@ export const styles = StyleSheet.create({
     marginBottom: 16,
     justifyContent: 'center',
   },
+
   hourButton: {
     width: (width - 88) / 6,
     height: 52,
@@ -253,16 +280,19 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.08)',
   },
+
   activeHourButton: {
     backgroundColor: '#10b981',
     borderColor: '#10b981',
     borderWidth: 2,
   },
+
   hourText: {
     color: '#a1a1aa',
     fontSize: 11,
     fontWeight: '700',
   },
+
   activeHourText: {
     color: '#ffffff',
   },
@@ -275,14 +305,17 @@ export const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: 'rgba(255, 255, 255, 0.06)',
   },
+
   summaryItem: {
     alignItems: 'center',
   },
+
   summaryLabel: {
     color: '#a1a1aa',
     fontSize: 11,
     fontWeight: '500',
   },
+
   summaryValue: {
     color: '#10b981',
     fontSize: 14,
@@ -314,17 +347,20 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.08)',
   },
+
   settingRow: {
     paddingVertical: 14,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255, 255, 255, 0.06)',
   },
+
   settingLabel: {
     color: '#ffffff',
     fontSize: 14,
     fontWeight: '700',
     marginBottom: 6,
   },
+
   settingHelpText: {
     color: '#a1a1aa',
     fontSize: 11,
@@ -332,6 +368,7 @@ export const styles = StyleSheet.create({
     lineHeight: 16,
     marginBottom: 10,
   },
+
   settingInput: {
     backgroundColor: 'rgba(255, 255, 255, 0.08)',
     color: '#ffffff',
@@ -346,12 +383,14 @@ export const styles = StyleSheet.create({
     minWidth: 80,
     alignSelf: 'center',
   },
+
   sliderRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
     marginTop: 8,
   },
+
   sliderValue: {
     color: '#10b981',
     fontSize: 14,
@@ -359,6 +398,7 @@ export const styles = StyleSheet.create({
     minWidth: 50,
     textAlign: 'center',
   },
+
   behaviorSlider: {
     flex: 1,
     height: 30,
@@ -374,11 +414,13 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.08)',
   },
+
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
   },
+
   cardTitle: {
     fontSize: 16,
     fontWeight: '700',
@@ -386,7 +428,7 @@ export const styles = StyleSheet.create({
     marginLeft: 10,
   },
 
-  // Timeline View
+  // Timeline View - ENHANCED
   timelineCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.03)',
     marginHorizontal: 20,
@@ -396,37 +438,44 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.08)',
   },
+
   timelineRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 6,
     gap: 12,
   },
+
   timelineDeviceInfo: {
     width: 100,
   },
+
   timelineDeviceName: {
     color: '#ffffff',
     fontSize: 12,
     fontWeight: '700',
   },
+
   timelineDeviceType: {
     color: '#a1a1aa',
     fontSize: 10,
     fontWeight: '500',
     marginTop: 2,
   },
+
   timelineHours: {
     flexDirection: 'row',
     flex: 1,
     gap: 1,
   },
+
   timelineHour: {
     flex: 1,
     height: 18,
     backgroundColor: 'rgba(255, 255, 255, 0.08)',
     borderRadius: 3,
   },
+
   activeTimelineHour: {
     backgroundColor: '#10b981',
   },
@@ -441,23 +490,28 @@ export const styles = StyleSheet.create({
     borderRadius: 12,
     gap: 8,
   },
+
   primaryButton: {
     backgroundColor: '#10b981',
   },
+
   buttonText: {
     color: '#ffffff',
     fontSize: 14,
     fontWeight: '700',
   },
+
   buttonContent: {
     alignItems: 'center',
   },
+
   progressHint: {
     fontSize: 11,
     color: 'rgba(255, 255, 255, 0.7)',
     marginTop: 4,
     fontWeight: '500',
   },
+
   progressHintComplete: {
     fontSize: 11,
     color: '#10b981',
@@ -474,6 +528,7 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop: 10,
   },
+
   progressFill: {
     height: '100%',
     backgroundColor: '#10b981',
@@ -493,6 +548,7 @@ export const styles = StyleSheet.create({
     borderColor: 'rgba(59, 130, 246, 0.3)',
     gap: 12,
   },
+
   infoText: {
     flex: 1,
     fontSize: 12,
@@ -515,6 +571,7 @@ export const styles = StyleSheet.create({
     marginTop: 12,
     gap: 6,
   },
+
   copyScheduleText: {
     color: '#10b981',
     fontSize: 12,
@@ -527,12 +584,14 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 60,
   },
+
   emptyStateText: {
     fontSize: 16,
     fontWeight: '700',
     color: '#a1a1aa',
     marginTop: 12,
   },
+
   emptyStateSubtext: {
     fontSize: 13,
     color: '#6b7280',
@@ -546,14 +605,17 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: 16,
   },
+
   previewStat: {
     alignItems: 'center',
   },
+
   previewStatLabel: {
     color: '#a1a1aa',
     fontSize: 11,
     fontWeight: '500',
   },
+
   previewStatValue: {
     color: '#10b981',
     fontSize: 16,

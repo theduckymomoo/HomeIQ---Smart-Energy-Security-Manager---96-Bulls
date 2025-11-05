@@ -12,6 +12,8 @@ import SecurityTab from './DashboardComponets/SecurityTab';
 import SettingsTab from './DashboardComponets/SettingsTab';
 import LoadsheddingTab from './DashboardComponets/LoadsheddingTab';
 import LoadsheddingOverviewModal from './DashboardComponets/LoadsheddingOverviewModal';
+import SimulationControls from './Simulation/SimulationControls';
+import mlService from './MLEngine/MLService';
 
 const { width } = Dimensions.get('window');
 
@@ -30,6 +32,7 @@ const Dashboard = () => {
     efficiency: 85,
   });
   const [showOverviewModal, setShowOverviewModal] = useState(false);
+  const [showSimulator, setShowSimulator] = useState(false); // NEW: Simulator modal state
   const [triggerAddDevice, setTriggerAddDevice] = useState(false);
   const insets = useSafeAreaInsets();
   const { user, supabase } = useAuth();
@@ -44,17 +47,13 @@ const Dashboard = () => {
       onStartShouldSetPanResponder: () => false,
       onStartShouldSetPanResponderCapture: () => false,
       onMoveShouldSetPanResponder: (evt, gestureState) => {
-        // Don't interfere with settings tab
         if (activeTab === 5) return false;
-        // Check for horizontal swipe
         const isHorizontal = Math.abs(gestureState.dx) > Math.abs(gestureState.dy) * 1.5;
         const hasMovement = Math.abs(gestureState.dx) > 20;
         return isHorizontal && hasMovement;
       },
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
-        // Don't interfere with settings tab
         if (activeTab === 5) return false;
-        // Capture horizontal swipes early to prevent ScrollView from taking them
         const isHorizontal = Math.abs(gestureState.dx) > Math.abs(gestureState.dy) * 1.5;
         const hasSignificantMovement = Math.abs(gestureState.dx) > 15;
         return isHorizontal && hasSignificantMovement;
@@ -63,7 +62,6 @@ const Dashboard = () => {
         isSwipeGesture.current = true;
       },
       onPanResponderMove: (evt, gestureState) => {
-        // Track if this is truly a horizontal swipe
         const isHorizontal = Math.abs(gestureState.dx) > Math.abs(gestureState.dy) * 1.5;
         isSwipeGesture.current = isHorizontal;
       },
@@ -83,14 +81,12 @@ const Dashboard = () => {
           direction: gestureState.dx < 0 ? 'LEFT (next)' : 'RIGHT (prev)'
         });
 
-        // Swipe LEFT (negative dx) - go FORWARD to next tab
         if ((gestureState.dx < -SWIPE_THRESHOLD || gestureState.vx < -VELOCITY_THRESHOLD)
           && activeTab < tabs.length - 1) {
           console.log('✓ Moving to tab:', activeTab + 1, tabs[activeTab + 1].name);
           setActiveTab(activeTab + 1);
           Vibration.vibrate(50);
         }
-        // Swipe RIGHT (positive dx) - go BACK to previous tab
         else if ((gestureState.dx > SWIPE_THRESHOLD || gestureState.vx > VELOCITY_THRESHOLD)
           && activeTab > 0) {
           console.log('✓ Moving to tab:', activeTab - 1, tabs[activeTab - 1].name);
@@ -105,7 +101,6 @@ const Dashboard = () => {
       onPanResponderTerminate: () => {
         isSwipeGesture.current = false;
       },
-      // CRITICAL: Don't let native components block our responder
       onPanResponderTerminationRequest: () => false,
       onShouldBlockNativeResponder: () => true,
     })
@@ -119,36 +114,29 @@ const Dashboard = () => {
     { name: 'Security', component: SecurityTab, icon: 'shield' },
   ];
 
-  // ---------- hidden tab (reachable only by avatar) ----------
   const SETTINGS_TAB_INDEX = 5;
 
-  // Handler for navigating to Devices tab and triggering add device modal
   const handleNavigateToAddDevice = () => {
-    setActiveTab(1); // Navigate to Devices tab (index 1)
-    // Use a small delay to ensure the tab has switched before triggering the modal
+    setActiveTab(1);
     setTimeout(() => {
       setTriggerAddDevice(true);
-      // Reset the trigger after a short delay
       setTimeout(() => {
         setTriggerAddDevice(false);
       }, 100);
     }, 100);
   };
 
-  // Handler for navigating to Analytics tab
   const handleNavigateToAnalytics = () => {
-    setActiveTab(2); // Navigate to Analytics tab (index 2)
+    setActiveTab(2);
   };
 
   const hiddenTabs = {
-    [SETTINGS_TAB_INDEX]: SettingsTab, // component for index 5
+    [SETTINGS_TAB_INDEX]: SettingsTab,
   };
 
-  // Fetch loadshedding data using free API
   const fetchLoadsheddingData = async () => {
     try {
       console.log('Fetching loadshedding data...');
-      // Using a free loadshedding API that doesn't require authentication
       const statusResponse = await fetch('https://loadshedding.eskom.co.za/LoadShedding/GetStatus', {
         method: 'GET',
         headers: {
@@ -159,21 +147,14 @@ const Dashboard = () => {
 
       if (!statusResponse.ok) {
         console.log('Status response not OK, using mock data');
-        // Use mock data for testing if API fails
         setLoadsheddingMockData();
         return;
       }
 
       const statusText = await statusResponse.text();
       console.log('Status response:', statusText);
-
-      // The Eskom API returns just a number (0-8) as plain text
       const stage = parseInt(statusText) || 0;
-
-      // Get user's area from profile
       const userArea = await getUserArea();
-
-      // Calculate next slot based on stage and area (simplified)
       const nextSlot = calculateNextSlot(stage, userArea);
 
       setLoadshedding({
@@ -185,17 +166,15 @@ const Dashboard = () => {
       console.log('Loadshedding data updated:', { stage, area: userArea?.name });
     } catch (error) {
       console.error('Error fetching loadshedding data:', error);
-      // Use mock data instead of showing error
       setLoadsheddingMockData();
     }
   };
 
-  // Set mock data for testing/demo purposes
   const setLoadsheddingMockData = () => {
-    const mockStage = Math.floor(Math.random() * 5); // Random stage 0-4
+    const mockStage = Math.floor(Math.random() * 5);
     const now = new Date();
-    const nextStart = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 hours from now
-    const nextEnd = new Date(nextStart.getTime() + 2.5 * 60 * 60 * 1000); // 2.5 hours duration
+    const nextStart = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+    const nextEnd = new Date(nextStart.getTime() + 2.5 * 60 * 60 * 1000);
 
     setLoadshedding({
       stage: mockStage,
@@ -210,17 +189,11 @@ const Dashboard = () => {
     console.log('Using mock loadshedding data - Stage:', mockStage);
   };
 
-  // Calculate next loadshedding slot (simplified calculation)
   const calculateNextSlot = (stage, userArea) => {
     if (stage === 0) return null;
-
-    // This is a simplified calculation
-    // In production, you'd fetch actual schedules from your area's municipality
     const now = new Date();
     const hour = now.getHours();
-
-    // Simple logic: calculate next slot based on current time and stage
-    let nextSlotHour = Math.ceil(hour / 2) * 2; // Round to next even hour
+    let nextSlotHour = Math.ceil(hour / 2) * 2;
     if (nextSlotHour === hour) nextSlotHour += 2;
     if (nextSlotHour >= 24) nextSlotHour = 0;
 
@@ -230,7 +203,7 @@ const Dashboard = () => {
       nextStart.setDate(nextStart.getDate() + 1);
     }
 
-    const nextEnd = new Date(nextStart.getTime() + 2.5 * 60 * 60 * 1000); // 2.5 hours
+    const nextEnd = new Date(nextStart.getTime() + 2.5 * 60 * 60 * 1000);
 
     return {
       start: nextStart.toISOString(),
@@ -239,7 +212,6 @@ const Dashboard = () => {
     };
   };
 
-  // Get user's area from profile
   const getUserArea = async () => {
     try {
       const { data, error } = await supabase
@@ -263,7 +235,6 @@ const Dashboard = () => {
     }
   };
 
-  // Fetch appliances data
   const fetchAppliances = async () => {
     if (!user?.id) return;
 
@@ -292,8 +263,8 @@ const Dashboard = () => {
     const kWh = totalUsage / 1000;
     const hoursPerMonth = 24 * 30;
     const monthlyCost = kWh * hoursPerMonth * 2.50;
-
     const avgUsagePerDevice = totalUsage / Math.max(activeAppliances.length, 1);
+
     let efficiency = 100;
     if (avgUsagePerDevice > 300) efficiency = 60;
     else if (avgUsagePerDevice > 200) efficiency = 70;
@@ -308,11 +279,18 @@ const Dashboard = () => {
     });
   };
 
+  // NEW: Handle simulation update
+  const handleSimulationUpdate = async (result) => {
+    console.log('Simulation update:', result);
+    await fetchAppliances();
+  };
+
   useEffect(() => {
     if (user?.id) {
+      console.log('🔧 Initializing ML Service for user:', user.id);
+      mlService.setCurrentUser(user.id, supabase);
       fetchAppliances();
       fetchLoadsheddingData();
-      // Refresh loadshedding data every 15 minutes
       const interval = setInterval(fetchLoadsheddingData, 15 * 60 * 1000);
       return () => clearInterval(interval);
     }
@@ -328,29 +306,32 @@ const Dashboard = () => {
 
     if (activeTab === 0) {
       return <ActiveComponent 
+        stats={stats} 
         appliances={appliances}
-        stats={stats}
-        loadshedding={loadshedding}
         onNavigateToAddDevice={handleNavigateToAddDevice}
         onNavigateToAnalytics={handleNavigateToAnalytics}
+        onRefresh={fetchAppliances}
+        onOpenSimulator={() => setShowSimulator(true)} // NEW: Pass simulator trigger
       />;
     }
 
     if (activeTab === 1) {
       return <ActiveComponent 
+        appliances={appliances} 
+        onRefresh={fetchAppliances}
         triggerAddDevice={triggerAddDevice}
       />;
     }
 
     if (activeTab === 2) {
-      return <ActiveComponent />;
+      return <ActiveComponent 
+        appliances={appliances}
+        onOpenSimulator={() => setShowSimulator(true)} // NEW: Pass simulator trigger
+      />;
     }
 
     if (activeTab === 3) {
-      return <ActiveComponent 
-        loadshedding={loadshedding}
-        onRefresh={fetchLoadsheddingData}
-      />;
+      return <ActiveComponent loadshedding={loadshedding} />;
     }
 
     return <ActiveComponent />;
@@ -364,7 +345,6 @@ const Dashboard = () => {
 
   const handlePrepareDevices = async () => {
     setShowOverviewModal(false);
-
     const activeDevices = appliances.filter(app => app.status === 'on');
     const essentialDevices = appliances.filter(app =>
       ['refrigerator', 'router', 'camera'].includes(app.type)
@@ -400,7 +380,6 @@ const Dashboard = () => {
                 .in('id', nonEssential.map(app => app.id));
 
               if (error) throw error;
-
               await fetchAppliances();
               Alert.alert('Success', `Turned off ${nonEssential.length} device${nonEssential.length !== 1 ? 's' : ''}.`);
             } catch (error) {
@@ -419,11 +398,10 @@ const Dashboard = () => {
   };
 
   const handleGoToControls = () => {
-    setShowOverviewModal(false)
+    setShowOverviewModal(false);
     setActiveTab(1);
   };
 
-  // Get stage color
   const getStageColor = () => {
     if (loadshedding.stage === 0) return '#10b981';
     if (loadshedding.stage <= 2) return '#f59e0b';
@@ -432,69 +410,83 @@ const Dashboard = () => {
   };
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require('../assets/logo.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-        </View>
+    <SafeAreaProvider>
+      <View style={[styles.container, { paddingTop: insets.top }]}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.logoContainer}>
+            <Image 
+              source={require('../assets/logo.png')} 
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </View>
 
-        {/* Loadshedding Indicator - Now clickable */}
-        <TouchableOpacity 
-          style={[styles.loadsheddingIndicator, { backgroundColor: `${getStageColor()}20` }]}
-          onPress={handleStageIndicatorPress}
-          activeOpacity={0.7}
-        >
-          <MaterialIcons name="flash-off" size={16} color={getStageColor()} />
-          <Text style={[styles.stageText, { color: getStageColor() }]}>
-            {loadshedding.stage === 0 ? 'No Loadshedding' : `Stage ${loadshedding.stage}`}
-          </Text>
-        </TouchableOpacity>
-
-        <UserAvatar onPress={handleUserSettings} />
-      </View>
-
-      {/* Main Content with Swipe Gesture */}
-      <View style={styles.content} {...panResponder.panHandlers}>
-        {renderActiveComponent()}
-      </View>
-
-      {/* Bottom Navigation */}
-      <View style={styles.bottomNavigation}>
-        {tabs.map((tab, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.navButton}
-            onPress={() => setActiveTab(index)}
+          {/* Loadshedding Indicator */}
+          <TouchableOpacity 
+            style={[styles.loadsheddingIndicator, { backgroundColor: getStageColor() + '20' }]}
+            onPress={handleStageIndicatorPress}
             activeOpacity={0.7}
           >
-            <MaterialIcons
-              name={tab.icon}
-              size={24}
-              color={activeTab === index ? '#10b981' : '#6c757d'}
+            <MaterialIcons 
+              name={loadshedding.stage === 0 ? "flash-on" : "flash-off"} 
+              size={16} 
+              color={getStageColor()} 
             />
-            <Text style={[styles.navText, activeTab === index && styles.activeNavText]}>
-              {tab.name}
+            <Text style={[styles.stageText, { color: getStageColor() }]}>
+              {loadshedding.stage === 0 ? 'No Loadshedding' : `Stage ${loadshedding.stage}`}
             </Text>
           </TouchableOpacity>
-        ))}
-      </View>
 
-      {/* Loadshedding Overview Modal */}
-      <LoadsheddingOverviewModal
-        visible={showOverviewModal}
-        onClose={() => setShowOverviewModal(false)}
-        loadshedding={loadshedding}
-        appliances={appliances}
-        onPrepareDevices={handlePrepareDevices}
-        onGoToLoadshedding={handleGoToLoadshedding}
-        onGoToControls={handleGoToControls}
-      />
-    </View>
+          <UserAvatar onPress={handleUserSettings} />
+        </View>
+
+        {/* Main Content with Swipe Gesture */}
+        <View style={styles.content} {...panResponder.panHandlers}>
+          {renderActiveComponent()}
+        </View>
+
+        {/* Bottom Navigation */}
+        <View style={styles.bottomNavigation}>
+          {tabs.map((tab, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.navButton}
+              onPress={() => setActiveTab(index)}
+              activeOpacity={0.7}
+            >
+              <MaterialIcons 
+                name={tab.icon} 
+                size={24} 
+                color={activeTab === index ? '#10b981' : '#6c757d'} 
+              />
+              <Text style={[styles.navText, activeTab === index && styles.activeNavText]}>
+                {tab.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Loadshedding Overview Modal */}
+        <LoadsheddingOverviewModal
+          visible={showOverviewModal}
+          onClose={() => setShowOverviewModal(false)}
+          loadshedding={loadshedding}
+          appliances={appliances}
+          onPrepareDevices={handlePrepareDevices}
+          onGoToLoadshedding={handleGoToLoadshedding}
+          onGoToControls={handleGoToControls}
+        />
+
+        {/* NEW: SimulationControls Modal */}
+        <SimulationControls 
+          visible={showSimulator}
+          onClose={() => setShowSimulator(false)}
+          appliances={appliances}
+          onSimulationUpdate={handleSimulationUpdate}
+        />
+      </View>
+    </SafeAreaProvider>
   );
 };
 

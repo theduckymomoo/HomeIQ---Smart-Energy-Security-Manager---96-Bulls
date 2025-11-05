@@ -12,11 +12,9 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import { LineChart, BarChart, PieChart } from 'react-native-chart-kit';
 import PropTypes from 'prop-types'; 
-import styles from './AnalysisStyles'; 
+import styles from './MLAnaStyles'; 
 
 const { width } = Dimensions.get('window');
-
-// --- Reusable Components ---
 
 const StatCard = ({ icon, value, label, color = '#10b981', onPress }) => (
   <TouchableOpacity

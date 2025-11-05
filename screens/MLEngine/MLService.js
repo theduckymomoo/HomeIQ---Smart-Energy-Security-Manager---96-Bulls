@@ -182,7 +182,6 @@ class MLService {
     }
   }
 
-
   async fastForwardSimulation(days = 1, onProgress = null) {
     if (!this.simulationEnabled) {
       return { success: false, error: 'Simulation not enabled' };
@@ -636,7 +635,7 @@ class MLService {
   }
 
   // FIXED: Get training progress based on days correctly
-  getTrainingProgress() {
+  async getTrainingProgress() {
     const engine = this.getCurrentEngine();
     if (!engine) {
       console.warn('⚠️ No ML engine available for training progress');
@@ -668,15 +667,17 @@ class MLService {
         enabled: this.simulationEnabled,
         isSimulating: this.isSimulating,
         simulatedDays: currentDays,
-        totalSamples: engine.trainingData.deviceUsage.length,
+        totalSamples: engine.trainingData.deviceUsage?.length || 0,
       },
     };
   }
 
-  // FIXED: injectSimulationData now creates day patterns
+  // FIXED: injectSimulationData now creates day patterns and returns success/failure
   async injectSimulationData(simulationData) {
     const engine = this.getCurrentEngine();
-    if (!engine || !simulationData) return;
+    if (!engine || !simulationData) {
+      return { success: false, error: 'ML Engine not available or no data provided' };
+    }
     
     try {
       const { deviceUsage, userActions, plannedData } = simulationData;
@@ -701,14 +702,25 @@ class MLService {
       }
       
       if (userActions?.length) {
+        if (!engine.trainingData.userActions) {
+          engine.trainingData.userActions = [];
+        }
         engine.trainingData.userActions.push(...userActions);
         console.log(`📥 Injected ${userActions.length} user actions`);
       }
       
+      // FIXED: Properly save and return success
       await engine.saveTrainingData();
       console.log(`📊 Total day patterns: ${engine.trainingData.dayPatterns?.length || 0}`);
+      
+      return { 
+        success: true, 
+        dayPatterns: engine.trainingData.dayPatterns?.length || 0,
+        message: 'Simulation data injected successfully' 
+      };
     } catch (error) { 
       console.error('Error injecting simulation data:', error); 
+      return { success: false, error: error.message };
     }
   }
 
